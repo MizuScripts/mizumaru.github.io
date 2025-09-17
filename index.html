@@ -132,7 +132,7 @@
   .progress{
     height:100%;
     width:0%;
-    background:linear-gradient(90deg,#666,#000);
+    background:linear-gradient(90deg,#888,#222);
     transition:width 0.1s linear;
   }
 
@@ -220,21 +220,26 @@
   const notification = document.getElementById('notification');
   const notifText = document.getElementById('notifText');
   const progress = document.getElementById('progress');
+  let notifActive = false; // anti-spam lock
 
   function showNotification(text){
+    if(notifActive) return;
+    notifActive = true;
+
     notifText.textContent = text;
     notification.classList.add('show');
     progress.style.width = "0%";
 
     let width = 0;
     let interval = setInterval(()=>{
-      width += 2;
+      width += 100 / (3500 / 50); // fill in 3.5s
       progress.style.width = width + "%";
       if(width >= 100){
         clearInterval(interval);
         notification.classList.remove('show');
+        notifActive = false;
       }
-    }, 30); // ~1.5s
+    }, 50);
   }
 
   document.getElementById('getScript').addEventListener('click',()=>{
