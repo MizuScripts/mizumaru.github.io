@@ -21,6 +21,15 @@
   }
 
   /* Space moving stars background */
+  body::before{
+    content:"";
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:black;
+    z-index:-2;
+  }
+
   canvas{
     position:fixed;
     top:0; left:0;
@@ -56,10 +65,11 @@
     flex-direction:column;
     gap:20px;
     margin-bottom:20px;
-    width:300px; /* wider buttons */
+    width:280px;
   }
 
-  .buttons button{
+  .buttons button,
+  .premium-box button{
     padding:15px 0;
     border-radius:20px;
     border:2px solid #555;
@@ -73,35 +83,17 @@
     outline:none;
   }
 
-  .buttons button:hover{
+  .buttons button:hover,
+  .premium-box button:hover{
     background:rgba(255,255,255,0.1);
     transform:scale(1.05);
-  }
-
-  .premium-box{
-    width:300px;
-    max-height:150px;
-    overflow-y:auto;
-    margin-bottom:20px;
-    background:rgba(255,255,255,0.05);
-    border-radius:15px;
-    padding:10px;
-    font-size:0.9em;
-    text-align:left;
-  }
-
-  .premium-box h3{
-    margin:0 0 10px 0;
-    text-align:center;
-    font-size:1.1em;
-    text-shadow:0 0 5px #fff;
   }
 
   footer{
     font-size:0.9em;
     color:#aaa;
     text-shadow:0 0 5px #fff;
-    margin-top:10px;
+    margin-top:20px;
   }
 
   .notification{
@@ -117,31 +109,49 @@
     opacity:0;
     transition:0.4s;
     z-index:9999;
-    width:260px;
-    text-align:center;
   }
   .notification.show{opacity:1;}
 
-  .progress-bar{
-    margin-top:10px;
-    width:100%;
-    height:8px;
-    border-radius:5px;
-    background:rgba(0,0,0,0.2);
-    overflow:hidden;
+  /* Premium Box */
+  .premium-box{
+    width:300px;
+    max-height:220px;
+    overflow-y:auto;
+    margin-top:25px;
+    padding:15px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.05);
+    box-shadow:0 0 20px #fff;
+    text-align:left;
   }
-  .progress{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#111,#555);
-    transition:width 0.1s linear;
+
+  .premium-box h2{
+    text-align:center;
+    margin-bottom:10px;
+    color:#ffd700;
+    text-shadow:0 0 10px #ffd700,0 0 20px #ffd700;
+  }
+
+  .premium-box ul{
+    margin:10px 0;
+    padding-left:20px;
+  }
+
+  .premium-box li{
+    margin-bottom:6px;
+    font-size:0.95em;
+  }
+
+  .premium-box button{
+    width:100%;
+    margin-top:10px;
   }
 
   @media(max-width:500px){
     h1{font-size:2em}
     .icons{font-size:1.5em}
-    .buttons{width:240px}
-    .premium-box{width:240px}
+    .buttons{width:230px}
+    .premium-box{width:250px}
   }
 </style>
 </head>
@@ -150,8 +160,8 @@
 <h1>MizuHub</h1>
 
 <div class="icons">
-  <a href="#" title="Discord"><i class="fab fa-discord"></i> DC</a>
-  <a href="#" title="YouTube"><i class="fab fa-youtube"></i> Yt</a>
+  <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+  <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
 </div>
 
 <div class="buttons">
@@ -159,60 +169,43 @@
   <button id="joinDiscord">Join MizuHub Discord! | <i class="fab fa-discord"></i></button>
 </div>
 
+<!-- Premium Features Box -->
 <div class="premium-box">
-  <h3>Premium Features</h3>
+  <h2>🌟 Premium Features</h2>
   <ul>
-    <li>✔ Exclusive Scripts</li>
-    <li>✔ Faster Load Times</li>
-    <li>✔ Auto Updates</li>
-    <li>✔ VIP Discord Access</li>
-    <li>✔ Early Beta Features</li>
-    <li>✔ Custom Themes</li>
+    <li>Exclusive GUI access</li>
+    <li>Early updates & scripts</li>
+    <li>Custom themes</li>
+    <li>Priority support</li>
+    <li>And more...</li>
   </ul>
+  <button id="premiumBtn">Get Premium</button>
 </div>
 
 <footer>Website By: @mizuscripts</footer>
 
-<div class="notification" id="notification">
-  <span id="notifText"></span>
-  <div class="progress-bar"><div class="progress" id="progress"></div></div>
-</div>
+<div class="notification" id="notification"></div>
 
 <canvas id="stars"></canvas>
 
 <script>
   const notification = document.getElementById('notification');
-  const notifText = document.getElementById('notifText');
-  const progress = document.getElementById('progress');
-
   function showNotification(text){
-    notifText.textContent = text;
+    notification.textContent = text;
     notification.classList.add('show');
-    let width = 0;
-    let interval = setInterval(()=>{
-      if(width >= 100){
-        clearInterval(interval);
-        setTimeout(()=>{
-          notification.classList.remove('show');
-          progress.style.width = "0%";
-        },300);
-      } else {
-        width++;
-        progress.style.width = width + "%";
-      }
-    },15);
+    setTimeout(()=>notification.classList.remove('show'),1500);
   }
 
   document.getElementById('getScript').addEventListener('click',()=>{
-    navigator.clipboard.writeText('loadstring(game:HttpGet("https://raw.githubusercontent.com/MizuScripts/MizuSpawner/refs/heads/main/Loader.lua"))()').then(()=>{
-      showNotification('Script copied!');
-    });
+    navigator.clipboard.writeText('loadstring(game:HttpGet("https://raw.githubusercontent.com/MizuScripts/MizuSpawner/refs/heads/main/Loader.lua"))()').then(()=>{showNotification('Script copied!')});
   });
 
   document.getElementById('joinDiscord').addEventListener('click',()=>{
-    navigator.clipboard.writeText('https://discord.gg/mxSvSpJe7s').then(()=>{
-      showNotification('Discord invite copied!');
-    });
+    navigator.clipboard.writeText('https://discord.gg/mxSvSpJe7s').then(()=>{showNotification('Discord invite copied!')});
+  });
+
+  document.getElementById('premiumBtn').addEventListener('click',()=>{
+    navigator.clipboard.writeText('https://discord.gg/mxSvSpJe7s').then(()=>{showNotification('Contact us on Discord for Premium!')});
   });
 
   // Space stars animation
