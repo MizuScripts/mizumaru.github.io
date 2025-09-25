@@ -309,6 +309,11 @@
       <span class="checkmark"></span>
       Steal A Brainrot
     </label>
+    <label>
+      <input type="radio" name="game" value="forest">
+      <span class="checkmark"></span>
+      99 Nights In The Forest
+    </label>
     <button id="confirmGame">Confirm</button>
   </div>
 </div>
@@ -348,19 +353,21 @@
   });
 
   confirmGame.addEventListener('click',()=>{
-    let selected = document.querySelector('input[name="game"]:checked');
-    if(!selected){
-      alert("Please choose a game first!");
-      return;
-    }
-    gameModal.style.display = "none";
+  let selected = document.querySelector('input[name="game"]:checked');
+  if(!selected){
+    alert("Please choose a game first!");
+    return;
+  }
+  gameModal.style.display = "none";
 
-    if(selected.value === "garden"){
-      window.open("https://mizuscripts.github.io/gagscript.github.io/","_blank");
-    } else if(selected.value === "brainrot"){
-      window.open("https://mizuscripts.github.io/sabscript.github.io/","_blank");
-    }
-  });
+  if(selected.value === "garden"){
+    window.open("https://mizuscripts.github.io/gagscript.github.io/","_blank");
+  } else if(selected.value === "brainrot"){
+    window.open("https://mizuscripts.github.io/sabscript.github.io/","_blank");
+  } else if(selected.value === "forest"){
+    window.open("https://mizuscripts.github.io/99forestscript.github.io/","_blank");
+  }
+});
 
   window.addEventListener('click',(e)=>{
     if(e.target === gameModal) gameModal.style.display="none";
